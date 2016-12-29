@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by Aliaksei_Piskun1 on 12/29/2016.
  */
-public class Client {
+public class Client implements BasicConnector {
 
     private Socket connection;
     private InputStream input;
@@ -104,7 +104,7 @@ public class Client {
         long startTime = new Date().getTime();
         while (true) {
             fileReader.seek(uploadedBytes);
-            byte[] bytes = new byte[64 * 1024];
+            byte[] bytes = new byte[BUFFER_SIZE];
             int countBytes = fileReader.read(bytes);
             if (countBytes <= 0) break;
             send(bytes, countBytes);
@@ -112,7 +112,6 @@ public class Client {
             long time = (new Date().getTime() - startTime);
             double speed = Double.MAX_VALUE;
             if (time != 0) speed = (((uploadedBytes - startOffset) / time) * 1000 * 8) / 1000000;
-            //System.out.println("<<< byte[" + countBytes + "] speed = " + speed + " Mbit/s");
         }
         return true;
     }
@@ -164,26 +163,26 @@ public class Client {
         long startOffset = offset;
         long startTime = new Date().getTime();
         sendQuiet(String.valueOf(offset));
+        double speed = 0;
         while (true) {
             if (offset >= fileSize) {
                 Pair<File, String> desiredFile = findUnderDownloadedFileBy(file.getName());
                 if (desiredFile != null) {
                     if (desiredFile.getValue().equals(connection.getRemoteSocketAddress().toString())) {
                         underDownloadedFiles.remove(desiredFile);
-                        System.out.println("File was downloaded");
+                        System.out.println("File was downloaded with a speed of: " + speed + " MBit/s");
                         fileChannel.close();
                         break;
                     }
                 }
             }
-            byte[] buffer = new byte[64 * 1024];
+            byte[] buffer = new byte[BUFFER_SIZE];
             int count = input.read(buffer);
             fileChannel.write(ByteBuffer.wrap(Arrays.copyOfRange(buffer, 0, count)), offset);
             offset += count;
             long time = (new Date().getTime() - startTime);
-            double speed = Double.MAX_VALUE;
+            speed = Double.MAX_VALUE;
             if (time != 0) speed = (((offset - startOffset) / time) * 1000 * 8) / 1000000;
-            //System.out.println(">>> byte[" + count + "] speed = " + speed + " Mbit/s");
         }
     }
 

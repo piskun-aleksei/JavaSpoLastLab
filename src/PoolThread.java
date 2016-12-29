@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * Created by Aliaksei_Piskun1 on 12/29/2016.
  */
-public class PoolThread extends  Thread {
+public class PoolThread extends Thread implements BasicConnector{
     private Server server;
     private Socket connection;
     private InputStream input;
@@ -147,14 +147,13 @@ public class PoolThread extends  Thread {
                     }
                 }
             }
-            byte[] buffer = new byte[64 * 1024];
+            byte[] buffer = new byte[BUFFER_SIZE];
             int count = input.read(buffer);
             fileChannel.write(ByteBuffer.wrap(Arrays.copyOfRange(buffer, 0, count)), offset);
             offset += count;
             long time = (new Date().getTime() - startTime);
             double speed = Double.MAX_VALUE;
             if (time != 0) speed = (((offset - startOffset) / time) * 1000 * 8) / 1000000;
-            //System.out.println(connection.getRemoteSocketAddress() + " >>> byte[" + count + "] speed = " + speed + " Mbit/s");
         }
     }
 
@@ -174,7 +173,7 @@ public class PoolThread extends  Thread {
         long startTime = new Date().getTime();
         while (true) {
             fileReader.seek(uploadedBytes);
-            byte[] bytes = new byte[64 * 1024];
+            byte[] bytes = new byte[BUFFER_SIZE];
             int countBytes = fileReader.read(bytes);
             if (countBytes <= 0) {
                 break;
@@ -184,7 +183,6 @@ public class PoolThread extends  Thread {
             long time = (new Date().getTime() - startTime);
             double speed = Double.MAX_VALUE;
             if (time != 0) speed = (((uploadedBytes - startOffset) / time) * 1000 * 8) / 1000000;
-            //System.out.println(connection.getRemoteSocketAddress() + " <<< byte[" + countBytes + "] speed = " + speed + " Mbit/s");
         }
     }
 

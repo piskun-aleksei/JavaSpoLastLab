@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by Aliaksei_Piskun1 on 12/29/2016.
  */
-public class Server {
+public class Server implements BasicConnector{
 
     private ServerSocket server;
     protected List<Pair<File, String>> underUploadedFiles = new ArrayList<>();
