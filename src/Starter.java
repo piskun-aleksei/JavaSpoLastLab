@@ -5,15 +5,14 @@ import java.io.InputStreamReader;
 /**
  * Created by Aliaksei_Piskun1 on 12/29/2016.
  */
-public class Application {
+public class Starter {
 
     public static void main(String[] args) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        loop:
+
         while (true) {
-            System.out.println("1. Client");
-            System.out.println("2. Server");
-            System.out.println("3. Exit");
+            System.out.println("1 for Client");
+            System.out.println("2 for Server");
             try {
                 switch (Integer.parseInt(reader.readLine())) {
                     case 1:
@@ -23,7 +22,7 @@ public class Application {
                         new Server(6790, 10).listen();
                         break;
                     case 3:
-                        break loop;
+                        break;
                 }
             } catch (IOException | NumberFormatException ignored) {
             }
