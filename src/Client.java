@@ -6,10 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousFileChannel;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Aliaksei_Piskun1 on 12/29/2016.
@@ -159,6 +156,7 @@ public class Client implements BasicConnector {
         long startTime = new Date().getTime();
         sendQuiet(String.valueOf(offset));
         double speed = 0;
+        int lastNumber = 0;
         while (true) {
             if (offset >= fileSize) {
                 Pair<File, String> desiredFile = findUnderDownloadedFileBy(file.getName());
@@ -177,7 +175,20 @@ public class Client implements BasicConnector {
             offset += count;
             long time = (new Date().getTime() - startTime);
             speed = Double.MAX_VALUE;
-            if (time != 0) speed = (((offset - startOffset) / time) * 1000 * 8) / 1000000;
+            if (time != 0) speed = (((offset - startOffset) / time) * 8) / 1000;
+            Double percentage = new Double((new Long(offset).doubleValue() / new Long(fileSize).doubleValue()) * 100);
+            Double amount = new Double(new Long(offset).doubleValue() / 1000000);
+
+            for(int i = 1; i < 11; i++) {
+                if(percentage >= i * 10 && percentage < (i + 1) * 10 && i > lastNumber) {
+                    //System.out.println(String.format("%.2f", percentage) + "% of file is downloaded");
+                    //TODO.. That's if we want to show actual percentage (trashes up the system)
+
+                    System.out.println( new Integer(i * 10).toString() + " % of the file is downloaded (" +
+                            String.format("%.2f", amount) + " MB)");
+                    lastNumber = i;
+                }
+            }
         }
     }
 

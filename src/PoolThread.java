@@ -33,7 +33,6 @@ public class PoolThread extends Thread {
                 process(line);
             }
         } catch (IOException e) {
-            //e.printStackTrace();
         } finally {
             if (!connection.isClosed()) try {
                 connection.close();
