@@ -184,7 +184,7 @@ public class Client implements BasicConnector {
                     //System.out.println(String.format("%.2f", percentage) + "% of file is downloaded");
                     //TODO.. That's if we want to show actual percentage (trashes up the system)
 
-                    System.out.println( new Integer(i * 10).toString() + " % of the file is downloaded (" +
+                    System.out.println( new Integer(i * 10).toString() + "% of the file is downloaded (" +
                             String.format("%.2f", amount) + " MB)");
                     lastNumber = i;
                 }
