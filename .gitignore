@@ -1,0 +1,13 @@
+/out/
+.idea
+*.iml
+/FirstAEMProjectArchetype/
+
+*/target/**
+target/
+
+.classpath
+.project
+.settings/
+
+/target/**
