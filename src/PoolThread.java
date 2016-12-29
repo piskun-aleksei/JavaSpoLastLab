@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * Created by Aliaksei_Piskun1 on 12/29/2016.
  */
-public class PoolThread extends Thread implements BasicConnector{
+public class PoolThread extends Thread {
     private Server server;
     private Socket connection;
     private InputStream input;
@@ -29,14 +29,12 @@ public class PoolThread extends Thread implements BasicConnector{
             while (true) {
                 String line = inputReader.readLine();
                 if (line == null) break;
-                System.out.println(connection.getRemoteSocketAddress() + " " +  line);
+                System.out.println(connection.getRemoteSocketAddress() + " " + line);
                 process(line);
             }
         } catch (IOException e) {
             //e.printStackTrace();
-        }
-        finally
-        {
+        } finally {
             if (!connection.isClosed()) try {
                 connection.close();
             } catch (IOException ignored) {
@@ -147,7 +145,7 @@ public class PoolThread extends Thread implements BasicConnector{
                     }
                 }
             }
-            byte[] buffer = new byte[BUFFER_SIZE];
+            byte[] buffer = new byte[BasicConnector.BUFFER_SIZE];
             int count = input.read(buffer);
             fileChannel.write(ByteBuffer.wrap(Arrays.copyOfRange(buffer, 0, count)), offset);
             offset += count;
@@ -173,7 +171,7 @@ public class PoolThread extends Thread implements BasicConnector{
         long startTime = new Date().getTime();
         while (true) {
             fileReader.seek(uploadedBytes);
-            byte[] bytes = new byte[BUFFER_SIZE];
+            byte[] bytes = new byte[BasicConnector.BUFFER_SIZE];
             int countBytes = fileReader.read(bytes);
             if (countBytes <= 0) {
                 break;

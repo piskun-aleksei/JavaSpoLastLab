@@ -9,21 +9,23 @@ public class Starter {
 
     public static void main(String[] args) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
+        BasicConnector connector = null;
         while (true) {
-            System.out.println("1 for Client");
-            System.out.println("2 for Server");
+            System.out.println("1 for Server");
+            System.out.println("2 for Client");
+
             try {
                 switch (Integer.parseInt(reader.readLine())) {
                     case 1:
-                        new Client().up();
+                        connector = new Server();
                         break;
                     case 2:
-                        new Server(6790, 10).listen();
+                        connector = new Client();
                         break;
                     case 3:
                         break;
                 }
+                connector.connect();
             } catch (IOException | NumberFormatException ignored) {
             }
         }

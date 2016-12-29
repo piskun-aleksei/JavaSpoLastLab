@@ -22,13 +22,8 @@ public class Client implements BasicConnector {
     private BufferedReader user = new BufferedReader(new InputStreamReader(System.in));
     private List<Pair<File, String>> underDownloadedFiles = new ArrayList<>();
 
-    public void up() {
-        while (true) {
-            setupConnection();
-        }
-    }
-
-    private void setupConnection() {
+    @Override
+    public void connect() {
         try {
             System.out.println("Enter Server's IP: ");
             String ip = user.readLine();
@@ -36,12 +31,12 @@ public class Client implements BasicConnector {
             String portLine = user.readLine();
             if (portLine.equals("")) return;
             Integer port = Integer.parseInt(portLine);
-            connect(ip, port);
+            connectToServer(ip, port);
         } catch (IOException | NumberFormatException ignored) {
         }
     }
 
-    private void connect(String ip, Integer port) {
+    private void connectToServer(String ip, Integer port) {
         try {
             connection = new Socket(ip, port);
             input = connection.getInputStream();

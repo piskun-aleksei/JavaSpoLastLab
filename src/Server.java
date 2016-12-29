@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by Aliaksei_Piskun1 on 12/29/2016.
  */
-public class Server implements BasicConnector{
+public class Server implements BasicConnector {
 
     private ServerSocket server;
     protected List<Pair<File, String>> underUploadedFiles = new ArrayList<>();
@@ -27,10 +27,10 @@ public class Server implements BasicConnector{
     private List<Integer> conectionNubmers;
     private int poolCapacity;
 
-    public Server(int port, int poolCapacity) {
+    public Server() {
         try {
-            this.poolCapacity = poolCapacity;
-            server = new ServerSocket(port);
+            this.poolCapacity = POOL_SIZE;
+            server = new ServerSocket(PORT);
             pool = new ThreadPool(poolCapacity);
             conectionNubmers = new ArrayList<>(poolCapacity);
         } catch (IOException e) {
@@ -38,16 +38,16 @@ public class Server implements BasicConnector{
         }
     }
 
-    public void listen() {
+    @Override
+    public void connect() {
         if (server != null) {
             System.out.println("Server is up");
             while (true) {
                 try {
                     Integer connection = pool.startConnection(this, server.accept());
-                    if(connection == null){
+                    if (connection == null) {
                         System.out.println("Pool is full");
-                    }
-                    else {
+                    } else {
                         conectionNubmers.add(connection);
                     }
                 } catch (IOException e) {

@@ -9,10 +9,10 @@ public class ThreadPool {
     private ArrayList<PoolThread> threads;
     private int capacity;
 
-    public ThreadPool(int poolCapacity){
+    public ThreadPool(int poolCapacity) {
         capacity = poolCapacity;
         threads = new ArrayList<>(poolCapacity);
-        for(int i = 0; i < poolCapacity; i ++){
+        for (int i = 0; i < poolCapacity; i++) {
             threads.add(new PoolThread());
         }
     }
@@ -20,15 +20,14 @@ public class ThreadPool {
     public Integer startConnection(Server server, Socket connection) throws IOException {
 
         Integer result = null;
-        for(int i = 0 ; i < capacity; i++){
+        for (int i = 0; i < capacity; i++) {
             PoolThread thread = threads.get(i);
-            if(thread.getState().equals(Thread.State.NEW) || thread.getState().equals(Thread.State.TERMINATED)){
+            if (thread.getState().equals(Thread.State.NEW) || thread.getState().equals(Thread.State.TERMINATED)) {
                 result = i;
-                if(thread.getState() == Thread.State.NEW){
+                if (thread.getState() == Thread.State.NEW) {
                     thread.setSC(server, connection);
                     thread.start();
-                }
-                else {
+                } else {
                     thread = new PoolThread();
                     thread.setSC(server, connection);
                     thread.start();
